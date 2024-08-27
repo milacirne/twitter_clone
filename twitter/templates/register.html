@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+  .radiolist,
+  #id_usable_password_helptext,
+  p label {
+      display: none;
+  }
+</style>
+
+<div class="col-md-6 offset-md-3">
+  <h1>Register</h1>
+  <br />
+  <form method=POST action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br />
+    <button type="submit" class="btn btn-dark">Register</button>
+  </form>
+
+</div>
+
+{% endblock  %}
