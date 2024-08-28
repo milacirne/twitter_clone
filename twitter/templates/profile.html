@@ -1,5 +1,20 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
+
+<style>
+  .profile-image {
+    width: 150px;
+    height: 150px; 
+    object-fit: cover;
+  }
+
+  .tweet-image {
+    width: 50px;
+    height: 50px; 
+    object-fit: cover;
+  }
+</style>
 
 {% if profile %}
 
@@ -12,10 +27,44 @@
         {% if tweets %}
           {% for tweet in tweets %}
             <div class="alert alert-dark" role="alert">
-              {{ tweet.body }} <br/>
-              <small class="text-muted fs-7">
-                ({{ tweet.created_at }}) by <strong>@{{ tweet.user.username }}</strong>
-              </small>
+              <div class="container">
+                <div class="row">
+                  <div class="col-2">
+                    {% if profile.profile_image %}
+                      <img src="{{ profile.profile_image.url }}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">
+                    {% else %}
+                      <img src="{% static 'images/default_profile_pic.png' %}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">	
+                    {% endif %}
+                  </div>
+                  <div class="col-8">
+                    {{ tweet.body }} <br/>
+                    <small class="text-muted fs-7">
+                      ({{ tweet.created_at }}) by <strong>@{{ tweet.user.username }}</strong>                      
+                    </small>
+                  </div>
+
+                  <div class="col-2 d-flex justify-content-center align-items-center">
+                    <br />
+                    <small>
+                      {% if user in tweet.likes.all %}
+                        <a href="{% url "tweet_like" tweet.id %}" style="text-decoration: none;">
+                          <i class="bi bi-heart-fill fw-bold" style="color:indianred"></i>
+                        </a>
+                      {% else %}
+                        <a href="{% url "tweet_like" tweet.id %}" style="text-decoration: none;">
+                          <i class="bi bi-heart" style="color:indianred"></i></a>                
+                      {% endif %}
+                      {{ tweet.number_of_likes }}
+                      &nbsp;&nbsp;  
+                      <a href="{% url "tweet_share" tweet.id %}">
+                        <i class="bi bi-share" style="color:slategrey"></i>
+                      </a>
+                    </small>
+                    
+                  </div>
+                </div>
+              </div>
+
             </div>
             <br /><br />
           {% endfor %}
@@ -26,9 +75,39 @@
         <br /><br /><br />
         
         {% if profile.profile_image  %}
-          <img src="{{ profile.profile_image.url }}" alt="Profile Image">
-          
+          <img src="{{ profile.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+          <br /><br/>
         {% endif %}
+        &nbsp;&nbsp;
+        {% if profile.homepage_link %}
+          <a href="{{ profile.homepage_link }}" style="text-decoration: none;" target="_blank">
+            <i class="bi bi-link-45deg" style="color:slategrey"></i>
+          </a>
+          &nbsp;&nbsp;  
+        {% endif %}
+
+        {% if profile.instagram_link %}
+          <a href="{{ profile.instagram_link }}" style="text-decoration: none;" target="_blank">
+            <i class="bi bi-instagram" style="color:slategrey"></i>
+          </a>
+          &nbsp;&nbsp;  
+        {% endif %}
+
+        {% if profile.linkedin_link %}
+          <a href="{{ profile.linkedin_link }}" style="text-decoration: none;" target="_blank">
+            <i class="bi bi-linkedin" style="color:slategrey"></i>
+          </a>
+          &nbsp;&nbsp;  
+        {% endif %}
+
+        <br /><br />
+        {% if profile.profile_bio %}
+          <p align="justify">
+            {{profile.profile_bio }}
+          </p>
+        {% endif %}
+
+        <br />
 
         <div class="card">
           <h5 class="card-header">Follows</h5>

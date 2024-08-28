@@ -18,7 +18,7 @@
         <h1>Tweet Feed</h1>
         <br />
 
-        {% for tweet in tweets %}
+        
           <div class="alert alert-dark" role="alert">
             <div class="container">
               <div class="row">
@@ -39,20 +39,17 @@
                 <div class="col-2 d-flex justify-content-center align-items-center">
                   <br />
                   <small>
+                    {{ tweet.number_of_likes }}
+
                     {% if user in tweet.likes.all %}
-                      <a href="{% url "tweet_like" tweet.id %}" style="text-decoration: none;">
+                      <a href="{% url "tweet_like" tweet.id %}">
                         <i class="bi bi-heart-fill fw-bold" style="color:indianred"></i>
                       </a>
                     {% else %}
-                      <a href="{% url "tweet_like" tweet.id %}" style="text-decoration: none;">
-                        <i class="bi bi-heart" style="color:indianred"></i></a>                
+                      <a href="{% url "tweet_like" tweet.id %}">
+                        <i class="bi bi-heart" style="color:indianred"></i>
+                      </a>                
                     {% endif %}
-                    {{ tweet.number_of_likes }}
-                    &nbsp;&nbsp;  
-                    <a href="{% url "tweet_share" tweet.id %}">
-                      <i class="bi bi-share" style="color:slategrey"></i>
-                    </a>
-
                   </small>
                   
                 </div>
@@ -61,7 +58,7 @@
             
           </div>
           <br /><br />
-        {% endfor %}
+        
   </div>
 
   <div class="col-4">

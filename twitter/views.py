@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from .models import Profile, Tweet
 from .forms import TweetForm, SignUpForm, ProfilePicForm
@@ -106,6 +106,8 @@ def register_user(request):
 
   return render(request, "register.html", {"form": form})
 
+
+
 def update_user(request):
   if request.user.is_authenticated:
     current_user = User.objects.get(id=request.user.id)
@@ -126,5 +128,32 @@ def update_user(request):
   else:
     messages.success(request, ("Ooops. You must be logged in to view that page."))
     return redirect("home")
-  
+
+
+
+def tweet_like(request, pk):
+  if request.user.is_authenticated:
+    tweet = get_object_or_404(Tweet, id=pk)
+    if tweet.likes.filter(id=request.user.id):
+      tweet.likes.remove(request.user)
     
+    else:
+      tweet.likes.add(request.user)
+    
+    return redirect(request.META.get("HTTP_REFERER"))
+    
+  else:
+    messages.success(request, ("Ooops. You must be logged in to view that page."))
+    return redirect("home")
+
+
+
+def tweet_share(request, pk):
+  tweet = get_object_or_404(Tweet, id=pk)
+
+  if tweet.likes.filter(id=request.user.id):
+    return render(request, "tweet_share.html", {'tweet': tweet})
+    
+  else:
+    messages.success(request, ("Ooops. That tweet does not exist."))
+    return redirect("home")

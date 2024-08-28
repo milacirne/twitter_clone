@@ -6,10 +6,14 @@ from django.contrib.auth.models import User
 # Profile Extras Form
 class ProfilePicForm(forms.ModelForm):
 	profile_image = forms.ImageField(label="Profile Picture")
+	profile_bio = forms.CharField(label="", widget=forms.Textarea(attrs={"class":"form-control", "placeholder":"Profile Bio", "style": "resize: none;"}))
+	homepage_link = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Website"}))
+	instagram_link = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Instagram"}))
+	linkedin_link =  forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Linkedin"}))
 	
 	class Meta:
 		model = Profile
-		fields = ('profile_image', )
+		fields = ("profile_image","profile_bio", "homepage_link", "instagram_link", "linkedin_link")
 
 
 class TweetForm(forms.ModelForm):
@@ -18,13 +22,14 @@ class TweetForm(forms.ModelForm):
       attrs={
       "placeholder": "What's happening?",
       "class": "form-control",
+			"style": "resize: none;",
       }), 
       label="",
   )
 
   class Meta:
     model = Tweet
-    exclude = ("user",)
+    exclude = ("user", "likes",)
 
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
