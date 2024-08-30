@@ -221,3 +221,23 @@ def tweet_share(request, pk):
   else:
     messages.success(request, ("Ooops. That tweet does not exist."))
     return redirect("home")
+
+
+
+def delete_tweet(request, pk):
+  if request.user.is_authenticated:
+    tweet = get_object_or_404(Tweet, id=pk)
+		# Check to see if you own the tweet
+    if request.user.username == tweet.user.username:
+			# Delete The Meep
+      tweet.delete()
+			
+      messages.success(request, ("The tweet has been deleted."))
+      return redirect(request.META.get("HTTP_REFERER"))	
+    else:
+      messages.success(request, ("You don't own that tweet."))
+      return redirect("home")
+
+  else:
+    messages.success(request, ("Please log in to continue."))
+    return redirect(request.META.get("HTTP_REFERER"))

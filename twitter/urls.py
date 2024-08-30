@@ -15,4 +15,5 @@ urlpatterns = [
   path("tweet_share/<int:pk>", views.tweet_share, name="tweet_share"),
   path("unfollow/<int:pk>", views.unfollow, name="unfollow"),
   path("follow/<int:pk>", views.follow, name="follow"),
+  path('delete_tweet/<int:pk>', views.delete_tweet, name="delete_tweet"),
 ]

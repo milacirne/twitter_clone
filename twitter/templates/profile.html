@@ -55,10 +55,14 @@
                           <i class="bi bi-heart" style="color:indianred"></i></a>                
                       {% endif %}
                       {{ tweet.number_of_likes }}
-                      &nbsp;&nbsp;  
-                      <a href="{% url "tweet_share" tweet.id %}">
-                        <i class="bi bi-share" style="color:slategrey"></i>
-                      </a>
+                      &nbsp;&nbsp;
+                      <a href="{% url "tweet_share" tweet.id %}"><i class="bi bi-share" style="color:slategrey"></i></a>
+                      
+                      {% if request.user.username == profile.user.username %}
+                        &nbsp;&nbsp;
+                        <a href="{% url "delete_tweet" tweet.id %}"><i class="bi bi-trash3" style="color:slategrey"></i></a>
+                      {% endif %}
+                      
                     </small>
                     
                   </div>
