@@ -33,7 +33,7 @@
                     {% if profile.profile_image %}
                       <img src="{{ profile.profile_image.url }}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">
                     {% else %}
-                      <img src="{% static 'images/default_profile_pic.png' %}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">	
+                      <img src="{% static 'images/default_profile_pic.png' %}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">
                     {% endif %}
                   </div>
                   <div class="col-8">
@@ -77,6 +77,8 @@
         {% if profile.profile_image  %}
           <img src="{{ profile.profile_image.url }}" alt="Profile Image" class="rounded-circle profile-image">
           <br /><br/>
+        {% else %}
+          <img src="{% static 'images/default_profile_pic.png' %}" class="rounded-circle profile-image" alt="{{ profile.user.username }}">
         {% endif %}
         &nbsp;&nbsp;
         {% if profile.homepage_link %}
@@ -111,25 +113,37 @@
 
         <div class="card">
           <h5 class="card-header">Follows</h5>
-          <div class="card-body">
-            <p class="card-text">
-              {% for following in profile.follows.all %}
-                <a href="{% url "profile" following.user.id %}">@{{ following }} <br /><br /></a>
-              {% endfor %}
-            </p>
+            <div class="card-body">
+              <p class="card-text">
+                {% for following in profile.follows.all|slice:5 %}
+                  <a href="{% url 'profile' following.user.id %}">@{{ following }}</a> 
+                  <a href="{% url 'unfollow' following.user.id %}">
+                    <i class="bi bi-x-circle" style="color: indianred"></i>
+                  </a>
+                  <br/>
+                {% endfor %}
+              </p>
+            </div>
+            <div class="card-footer text-end">
+              <a href="{% url 'follows' profile.user.id %}"
+              class="btn btn-sm btn-outline-secondary">See All</a>
+            </div>
           </div>
-        </div>
 
         <br /><br />
 
         <div class="card">
-          <h5 class="card-header">Followed by</h5>
-          <div class="card-body">
-            <p class="card-text">
-              {% for following in profile.followed_by.all %}
-                <a href="{% url "profile" following.user.id %}">@{{ following }} <br /><br /></a>
-              {% endfor %}
+          <h5 class="card-header">Followed By</h5>
+            <div class="card-body">
+              <p class="card-text">
+                {% for following in profile.followed_by.all|slice:5 %}
+                  <a href="{% url "profile" following.user.id %}">@{{ following }} <br /><br /></a>
+                {% endfor %}
             </p>
+          </div>
+          <div class="card-footer text-end">
+            <a href="{% url 'followers' profile.user.id %}"
+            class="btn btn-sm btn-outline-secondary">See All</a>
           </div>
         </div>
         <br />
