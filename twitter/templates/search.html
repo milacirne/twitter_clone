@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+  .tweet-image {
+    width: 50px;
+    height: 50px; 
+    object-fit: cover;
+  }
+</style>
+
+<h1>Search Tweets</h1>
+  <br />
+
+  <form  method=POST>
+    {% csrf_token %}
+    <input type="input" class="form-control"  placeholder="Search Tweets" name="search">
+    <br/><br/>
+    <button type="submit" class="btn btn-secondary">Search</button>
+  </form>
+
+  <br/><br/>
+
+  {% if search  %}
+  <h3>You searched for: {{ search }}</h3>
+  <br/>
+
+  {% for tweet in searched %}
+    <div class="alert alert-dark" role="alert">
+      <div class="container">
+        <div class="row">
+          <div class="col-2">
+            {% if tweet.user.profile.profile_image %}
+              <img src="{{ tweet.user.profile.profile_image.url }}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">
+            {% else %}
+              <img src="{% static 'images/default_profile_pic.png' %}" class="rounded-circle tweet-image" alt="{{ profile.user.username }}">	
+            {% endif %}
+          </div>
+          <div class="col-8">
+            {{ tweet.body }} <br/>
+            <small class="text-muted fs-7">
+              ({{ tweet.created_at }}) by <strong>@{{ tweet.user.username }}</strong>                    
+            </small>
+          </div>
+
+          <div class="col-2 d-flex justify-content-center align-items-center">
+            <br />
+            <small>
+              {% if user in tweet.likes.all %}
+                <a href="{% url "tweet_like" tweet.id %}" style="text-decoration: none;">
+                  <i class="bi bi-heart-fill fw-bold" style="color:indianred"></i>
+                </a>
+              {% else %}
+                <a href="{% url "tweet_like" tweet.id %}" style="text-decoration: none;">
+                  <i class="bi bi-heart" style="color:indianred"></i></a>                
+              {% endif %}
+              {{ tweet.number_of_likes }}
+              &nbsp;&nbsp;  
+              <a href="{% url "tweet_share" tweet.id %}">
+                <i class="bi bi-share" style="color:slategrey"></i>
+              </a>
+
+            </small>
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <br />
+    {% endfor %}
+  {% endif %}
+  <br/><br/>
+{% endblock  %}

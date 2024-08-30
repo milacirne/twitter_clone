@@ -241,3 +241,16 @@ def delete_tweet(request, pk):
   else:
     messages.success(request, ("Please log in to continue."))
     return redirect(request.META.get("HTTP_REFERER"))
+  
+
+
+def search(request):
+	if request.method == "POST":
+		# Grab the form field input
+		search = request.POST['search']
+		# Search the database
+		searched = Tweet.objects.filter(body__contains = search)
+
+		return render(request, "search.html", {"search": search, "searched": searched})
+	else:
+		return render(request, "search.html", {})
